@@ -3,8 +3,8 @@
 #  This program is free software; you can redistribute it and/or
 #  modify it under the same terms as Perl itself.
 #
-#   Date: $Date: 2008-06-05 08:15:41 +0200 (Thu, 05 Jun 2008) $
-#   Revision: $Revision: 27 $
+#   Date: $Date: 2008-06-05 13:09:14 +0200 (Thu, 05 Jun 2008) $
+#   Revision: $Revision: 34 $
 #
 
 package Google::SAML::Response;
@@ -111,7 +111,7 @@ use Google::SAML::Request;
 use Carp;
 
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head2 new
 

@@ -3,8 +3,8 @@
 #  This program is free software; you can redistribute it and/or
 #  modify it under the same terms as Perl itself.
 #
-#   Date: $Date: 2008-06-04 13:42:14 +0200 (Wed, 04 Jun 2008) $
-#   Revision: $Revision: 20 $
+#   Date: $Date: 2008-06-05 08:15:41 +0200 (Thu, 05 Jun 2008) $
+#   Revision: $Revision: 27 $
 #
 
 package Google::SAML::Response;
@@ -111,7 +111,7 @@ use Google::SAML::Request;
 use Carp;
 
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head2 new
 
@@ -480,9 +480,9 @@ Both can be used with Google::SAML::Response, however the default is to use the 
 because it is much easier to install. However, the latter's interface is much
 cleaner and Perl-like than the interface of the former.
 
-L<XML::Canonical|XML::Canonical> uses L<XML::GDOME|XML::GDOME> which has a stupid
-Makefile.PL that begs to be hacked because it insists on using the exact version
-of gdome that was available when Makefile.PL was written and then it still doesn't
+L<XML::Canonical|XML::Canonical> uses L<XML::GDOME|XML::GDOME> which has a
+Makefile.PL that begs to be hacked because it insists on using the version
+of gdome that was available when Makefile.PL was written (2003) and then it still doesn't
 install without force. L<XML::CanonicalizeXML|XML::CanonicalizeXML> is much easier
 to install, you just have to have the libxml development files installed so it will
 compile.

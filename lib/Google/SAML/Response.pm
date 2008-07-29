@@ -3,8 +3,8 @@
 #  This program is free software; you can redistribute it and/or
 #  modify it under the same terms as Perl itself.
 #
-#   Date: $Date: 2008-06-05 13:09:14 +0200 (Thu, 05 Jun 2008) $
-#   Revision: $Revision: 34 $
+#   Date: $Date: 2008-07-29 13:48:31 +0200 (Di, 29 Jul 2008) $
+#   Revision: $Revision: 48 $
 #
 
 package Google::SAML::Response;
@@ -16,7 +16,7 @@ SSO implementation
 
 =head1 VERSION
 
-You are currently reading the documentation for version 0.01
+You are currently reading the documentation for version 0.04
 
 =head1 DESCRIPTION
 
@@ -66,6 +66,8 @@ You will need the following modules installed:
 
 =item * L<Crypt::OpenSSL::RSA|Crypt::OpenSSL::RSA>
 
+=item * L<Crypt::OpenSSL::Bignum|Crypt::OpenSSL::Bignum>
+
 =item * L<XML::Canonical or XML::CanonicalizeXML|XML::Canonical or XML::CanonicalizeXML>
 
 =item * L<Digest::SHA|Digest::SHA>
@@ -75,7 +77,6 @@ You will need the following modules installed:
 =item * L<Google::SAML::Request|Google::SAML::Request>
 
 =back
-
 
 =head1 RESOURCES
 
@@ -111,7 +112,7 @@ use Google::SAML::Request;
 use Carp;
 
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 =head2 new
 
@@ -382,6 +383,9 @@ sub _response_xml {
     # A 160-bit string containing a set of randomly generated characters.
     my $assertion_id = sprintf 'GOSAML%010d%04d', time, rand(10000);
 
+    # The acs url
+    my $assertion_url = $self->{service_url};
+
     # The username for the authenticated user.
     my $username = $self->{login};
 
@@ -399,7 +403,9 @@ sub _response_xml {
            <Issuer>https://www.opensaml.org/IDP</Issuer>
            <Subject>
               <NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress">$username</NameID>
-              <SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer"></SubjectConfirmation>
+              <SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+                 <SubjectConfirmationData Recipient="$assertion_url" />
+              </SubjectConfirmation>
            </Subject>
            <Conditions NotBefore="$issue_instant" NotOnOrAfter="$best_before"> </Conditions>
            <AuthnStatement AuthnInstant="$authn_instant">

@@ -1,10 +1,10 @@
-#  Copyright (c) 2008 Manni Heumann. All rights reserved.
+#  Copyright (c) 2009 Manni Heumann. All rights reserved.
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the same terms as Perl itself.
 #
-#   Date: $Date: 2008-12-19 10:53:59 +0100 (Fr, 19 Dez 2008) $
-#   Revision: $Revision: 61 $
+#   Date: $Date: 2009-04-17 14:36:17 +0200 (Fri, 17 Apr 2009) $
+#   Revision: $Revision: 64 $
 #
 
 package Google::SAML::Response;
@@ -16,7 +16,7 @@ Google's SSO implementation
 
 =head1 VERSION
 
-You are currently reading the documentation for version 0.07
+You are currently reading the documentation for version 0.08
 
 =head1 DESCRIPTION
 
@@ -50,8 +50,8 @@ passwords.
  ...
 
  # Generate SAML response
- my $saml = Google::SAML::Response->new( key = $key, login => $login, request => $req );
- my $xml  = $saml->generate_signed_xml();
+ my $saml = Google::SAML::Response->new( { key => $key, login => $login, request => $req } );
+ my $xml  = $saml->get_response_xml();
 
  # Alternatively, send a HTML page to the client that will redirect
  # her to Google. You have to extract the RelayState param from the cgi
@@ -112,7 +112,7 @@ use Google::SAML::Request;
 use Carp;
 
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 =head2 new
 

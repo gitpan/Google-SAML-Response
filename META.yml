@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                Google-SAML-Response
-version:             0.07
+version:             0.08
 abstract:            Generate signed XML documents as SAML responses for
 license:             ~
 author:              

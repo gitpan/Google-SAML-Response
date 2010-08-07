@@ -14,7 +14,7 @@ BEGIN {
 SKIP: {
     skip "xmlsec1 not installed", 6 unless which('xmlsec1');
 
-    # Try whether xmlsec is correctly installed which 
+    # Test whether xmlsec is correctly installed which 
     # doesn't seem to be the case on every cpan testing machine
 
     my $output = `xmlsec1 --version`;
@@ -34,12 +34,13 @@ SKIP: {
     unlink 'tmp.xml';
 
     my $saml2 = Google::SAML::Response->new( { key => 't/dsa.private.key', login => 'someone', request => $request } );
-    $xml = $saml->get_response_xml();
+    $xml = $saml2->get_response_xml();
     ok( $xml, "Got XML for the response" );
     ok( open XML, '>', 'tmp.xml' );
     print XML $xml;
     close XML;
     $verify_response = `xmlsec1 --verify tmp.xml 2>&1`;
     ok( $verify_response =~ m/^OK/, "Response is OK for xmlsec1" );
+
     unlink 'tmp.xml';
 }

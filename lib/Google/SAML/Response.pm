@@ -1,9 +1,7 @@
-#  Copyright (c) 2009 Manni Heumann. All rights reserved.
+#  Copyright (c) 2010 Manni Heumann. All rights reserved.
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the same terms as Perl itself.
-#
-#   Date: 2009-11-06
 #
 
 package Google::SAML::Response;
@@ -15,7 +13,7 @@ Google's SSO implementation
 
 =head1 VERSION
 
-You are currently reading the documentation for version 0.09
+You are currently reading the documentation for version 0.10
 
 =head1 DESCRIPTION
 
@@ -49,12 +47,17 @@ passwords.
  ...
 
  # Generate SAML response
- my $saml = Google::SAML::Response->new( { key => $key, login => $login, request => $req } );
+ my $saml = Google::SAML::Response->new( { 
+                            key     => $key, 
+                            login   => $login, 
+                            request => $req 
+            } );
  my $xml  = $saml->get_response_xml();
 
  # Alternatively, send a HTML page to the client that will redirect
  # her to Google. You have to extract the RelayState param from the cgi
  # environment first.
+
  print $saml->get_google_form( $relayState );
 
 =head1 PREREQUISITES
@@ -111,7 +114,7 @@ use Google::SAML::Request;
 use Carp;
 
 
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 
 =head2 new
 
@@ -130,9 +133,10 @@ request your user contacted you with (make sure that it's not url-encoded, thoug
 =item * key
 
 The path to your private key that will be used to sign the response. Currently,
-only RSA and DSA keys without pass phrases are supported. NOTE: To handle DSA keys,
+only RSA and DSA keys without pass phrases are supported. B<NOTE>: To handle DSA keys,
 the module L<Crypt::OpenSSL::DSA|Crypt::OpenSSL::DSA> needs to be installed. However,
-it is not listed as a requirement in the Makefile for Google::SAML::Response.
+it is not listed as a requirement in the Makefile for Google::SAML::Response, so make
+sure it really is installed before using DSA keys.
 
 =item * login
 
@@ -182,8 +186,9 @@ sub new {
         $self->{ service_url }   = $request->AssertionConsumerServiceURL();
         $self->{ request_id }    = $request->ID();
         $self->{ ttl }           = ( exists $params->{ ttl } ) ? $params->{ ttl } : 60*2;
-        $self->{ canonicalizer } =
-            exists $params->{ canonicalizer } ? $params->{ canonicalizer } : 'XML::CanonicalizeXML';
+        $self->{ canonicalizer } = exists $params->{ canonicalizer } 
+                                    ? $params->{ canonicalizer } 
+                                    : 'XML::CanonicalizeXML';
 
         return $self;
     }
@@ -192,7 +197,6 @@ sub new {
     }
 
 }
-
 
 
 sub _load_dsa_key {
@@ -283,7 +287,6 @@ sub _load_key {
 }
 
 
-
 =head2 get_response_xml
 
 Generate the signed response xml and return it as a string
@@ -335,15 +338,22 @@ sub get_response_xml {
     # We now calculate a signature over the canonical SignedInfo element
 
     $canonical        = $self->_canonicalize_xml( $signed_info );
-    my $bin_signature = $self->{key_obj}->sign( $canonical );
-    my $signature     = encode_base64( $bin_signature, "\n" );
+    my $signature;
+
+    if ( $self->{ key_type } eq 'dsa' ) {
+        my $sig = $self->{ key_obj }->do_sign( sha1( $canonical ) );
+        $signature = encode_base64( $sig->get_r . $sig->get_s );
+    }
+    else {
+        my $bin_signature = $self->{key_obj}->sign( $canonical );
+        $signature = encode_base64( $bin_signature, "\n" );
+    }
 
     # With the signature value and the signedinfo element, we create
     # a Signature element:
     my $signature_xml = $self->_signature_xml( $signed_info, $signature );
 
     # Now insert the signature xml into our response xml
-    #$xml =~ s{</Assertion>}{</Assertion>$signature_xml};
     $xml =~ s/<samlp:Status>/$signature_xml<samlp:Status>/;
 
     return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" . $xml;
@@ -363,7 +373,6 @@ sub _signature_xml {
 }
 
 
-
 sub _signedinfo_xml {
     my $self = shift;
     my $digest_xml = shift;
@@ -374,7 +383,6 @@ sub _signedinfo_xml {
                 $digest_xml
             </SignedInfo>};
 }
-
 
 
 sub _reference_xml {
@@ -389,7 +397,6 @@ sub _reference_xml {
                         <DigestValue>$digest</DigestValue>
                     </Reference>};
 }
-
 
 
 sub _canonicalize_xml {
@@ -410,8 +417,6 @@ sub _canonicalize_xml {
         confess "Unknown XML canonicalizer module.";
     }
 }
-
-
 
 
 sub _response_xml {
@@ -569,7 +574,7 @@ Manni Heumann (saml at lxxi dot org)
 
 =head1 LICENSE
 
-Copyright (c) 2008-2009 Manni Heumann. All rights reserved.
+Copyright (c) 2008-2010 Manni Heumann. All rights reserved.
 
 This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.

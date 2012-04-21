@@ -13,7 +13,7 @@ Google's SSO implementation
 
 =head1 VERSION
 
-You are currently reading the documentation for version 0.11
+You are currently reading the documentation for version 0.12
 
 =head1 DESCRIPTION
 
@@ -115,7 +115,7 @@ use Carp;
 use HTML::Entities;
 
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 =head2 new
 

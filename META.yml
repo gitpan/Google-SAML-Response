@@ -27,10 +27,11 @@ requires:
   Digest::SHA: 0
   File::Which: 0
   Google::SAML::Request: 0
+  HTML::Entities: 0
   Test::Exception: 0
   Test::More: 0
   XML::CanonicalizeXML: 0
 resources:
   license: http://dev.perl.org/licenses/
   repository: http://github.com/mannih/cpan/tree/master/Google-SAML-Response/
-version: 0.11
+version: 0.12

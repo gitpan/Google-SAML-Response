@@ -1,21 +1,12 @@
+Build.PL
 Changes
-inc/Module/AutoInstall.pm
-inc/Module/Install.pm
-inc/Module/Install/AutoInstall.pm
-inc/Module/Install/Base.pm
-inc/Module/Install/Can.pm
-inc/Module/Install/Fetch.pm
-inc/Module/Install/Include.pm
-inc/Module/Install/Makefile.pm
-inc/Module/Install/Metadata.pm
-inc/Module/Install/Win32.pm
-inc/Module/Install/WriteAll.pm
-lib/Google/SAML/Response.pm
 LICENSE
-Makefile.PL
-MANIFEST			This list of files
-META.yml
-README
+META.json
+Makefile
+README.md
+cpanfile
+inc/Module/AutoInstall.pm
+lib/Google/SAML/Response.pm
 t/001_load.t
 t/002_xmlsec.t
 t/003_params.t
@@ -23,3 +14,5 @@ t/004_keyhandling.t
 t/005_interface.t
 t/dsa.private.key
 t/rsa.private.key
+META.yml
+MANIFEST
